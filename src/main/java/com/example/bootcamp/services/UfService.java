@@ -31,11 +31,11 @@ public class UfService {
         return ufRepository.save(ufVo);
     }
 
-    public Optional<UfVo> update(long id, UfVo ufVo) {
+    public Optional<UfVo> update(long id, UfDto ufDto) {
         return ufRepository.findById(id).map(existingUf -> {
-            existingUf.setSigla(ufVo.getSigla());
-            existingUf.setNome(ufVo.getNome());
-            existingUf.setStatus(ufVo.getStatus());
+            existingUf.setSigla(ufDto.sigla());
+            existingUf.setNome(ufDto.nome());
+            existingUf.setStatus(ufDto.status());
             return ufRepository.save(existingUf);
         });
     }

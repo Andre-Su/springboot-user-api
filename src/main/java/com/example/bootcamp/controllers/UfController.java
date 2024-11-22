@@ -35,10 +35,8 @@ public class UfController {
     }
 
     @PutMapping("/?id={id}")
-    public ResponseEntity<UfVo> updateUf(@PathVariable long id, @RequestBody UfVo ufVo) {
-        return ufService.update(id, ufVo)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<UfVo> updateUf(@PathVariable long id, @RequestBody UfDto ufDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
     }
 
     @DeleteMapping("/?id={id}")
