@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/uf")
@@ -18,15 +19,18 @@ public class UfController {
     private UfService ufService;
 
     @GetMapping
-    public List<UfVo> getAllUfs() {
-        return ufService.findAll();
+    public ResponseEntity<List<UfVo>> getAllUfs() {
+        return ResponseEntity.status(HttpStatus.OK).body(ufService.findAll());
     }
 
-    @GetMapping("/?id={id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UfVo> getUfById(@PathVariable long id) {
-        return ufService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<UfVo> ufVoOptional = ufService.findById(id);
+        if (ufVoOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(ufVoOptional.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
@@ -34,12 +38,12 @@ public class UfController {
         return ResponseEntity.status(HttpStatus.OK).body(ufService.save(ufDto)) ;
     }
 
-    @PutMapping("/?id={id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UfVo> updateUf(@PathVariable long id, @RequestBody UfDto ufDto) {
         return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
     }
 
-    @DeleteMapping("/?id={id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUf(@PathVariable long id) {
         if (ufService.delete(id)) {
             return ResponseEntity.noContent().build();
