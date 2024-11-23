@@ -1,5 +1,6 @@
 package com.example.bootcamp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -15,10 +16,10 @@ public class UfVo implements Serializable {
     @Column(name = "CODIGO_UF")
     private long codigoUf;
 
-    @Column(nullable = false, length = 3)
+    @Column(nullable = false, unique = true, length = 3)
     private String sigla;
 
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, unique = true, length = 60)
     private String nome;
 
     @Column(nullable = false, length = 3)
@@ -26,6 +27,7 @@ public class UfVo implements Serializable {
     // Associations
     @JsonProperty(access = JsonProperty.Access.AUTO)
     @OneToMany(mappedBy = "uf", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<MunicipioVo> municipios;
 
     public long getCodigoUf() {
