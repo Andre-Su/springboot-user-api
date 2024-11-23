@@ -26,11 +26,7 @@ public class UfController {
     @GetMapping("/{id}")
     public ResponseEntity<UfVo> getUfById(@PathVariable long id) {
         Optional<UfVo> ufVoOptional = ufService.findById(id);
-        if (ufVoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.OK).body(ufVoOptional.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ufVoOptional.map(ufVo -> ResponseEntity.status(HttpStatus.OK).body(ufVo)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/")
