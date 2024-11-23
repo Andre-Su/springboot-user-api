@@ -12,7 +12,7 @@ public class UfVo implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @SequenceGenerator(name = "SEQUENCE_UF")
-    @Column(name = "CODIGO_PESSOA")
+    @Column(name = "CODIGO_UF")
     private long codigoUf;
 
     @Column(nullable = false, length = 3)
