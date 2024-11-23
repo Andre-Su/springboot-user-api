@@ -29,7 +29,7 @@ public class UfController {
         return ufVoOptional.map(ufVo -> ResponseEntity.status(HttpStatus.OK).body(ufVo)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<UfVo> createUf(@RequestBody UfDto ufDto) {
         return ResponseEntity.status(HttpStatus.OK).body(ufService.save(ufDto)) ;
     }
