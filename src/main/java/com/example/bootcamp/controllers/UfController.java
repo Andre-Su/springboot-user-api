@@ -33,14 +33,19 @@ public class UfController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<UfVo> createUf(@RequestBody UfDto ufDto) {
         return ResponseEntity.status(HttpStatus.OK).body(ufService.save(ufDto)) ;
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<UfVo> updateUf(@PathVariable long id, @RequestBody UfDto ufDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
+        Optional<UfVo> ufVoOptional = ufService.findById(id);
+        if (ufVoOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
