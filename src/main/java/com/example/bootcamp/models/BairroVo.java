@@ -29,7 +29,7 @@ public class BairroVo implements Serializable {
 
     //endereco @OneToMany
     @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(mappedBy = "bairro")
+    @OneToMany(mappedBy = "bairro", fetch = FetchType.LAZY)
     private Set<EnderecoVo> endereco;
 
     public long getCodigoBairro() {

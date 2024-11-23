@@ -29,7 +29,7 @@ public class MunicipioVo implements Serializable {
 
     // Bairro
     @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(mappedBy = "municipio")
+    @OneToMany(mappedBy = "municipio", fetch = FetchType.LAZY)
     private Set<BairroVo> bairros;
 
     // Getters and Setters

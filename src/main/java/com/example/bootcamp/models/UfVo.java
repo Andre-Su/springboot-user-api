@@ -25,7 +25,7 @@ public class UfVo implements Serializable {
     private int status;
     // Associations
     @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(mappedBy = "uf")
+    @OneToMany(mappedBy = "uf", fetch = FetchType.LAZY)
     private Set<MunicipioVo> municipios;
 
     public long getCodigoUf() {
