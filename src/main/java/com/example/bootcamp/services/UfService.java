@@ -15,6 +15,10 @@ public class UfService {
     @Autowired
     private UfRepository ufRepository;
 
+    public boolean existsById(long id){
+        return ufRepository.existsById(id);
+    }
+
     public List<UfVo> findAll() {
         return ufRepository.findAll();
     }
