@@ -42,7 +42,7 @@ public class UfService {
 
     public boolean delete(long id) {
         return ufRepository.findById(id).map(uf -> {
-            ufRepository.delete(uf);
+            ufRepository.deleteById(uf.getCodigoUf());
             return true;
         }).orElse(false);
     }
