@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,14 +20,39 @@ public class UfController {
     private UfService ufService;
 
     @GetMapping
-    public ResponseEntity<List<UfVo>> getAllUfs() {
+    public ResponseEntity<List<UfVo>> getAllUfs(
+            @RequestParam(value = "id", defaultValue = "-1") long id,
+            @RequestParam(value = "sigla", defaultValue = "-1") String sigla,
+            @RequestParam(value = "nome", defaultValue = "-1") String nome
+    ) {
+        if (!(id == -1)){
+            Optional<UfVo> ufVoOptional = ufService.findById(id);
+            if (ufVoOptional.isPresent()){
+                List<UfVo> ufVoList = new ArrayList<>();
+                ufVoList.add(ufVoOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
+            } else
+                return ResponseEntity.notFound().build();
+        }
+        if (!(sigla.equals("-1"))) {
+            Optional<UfVo> ufVoOptional = ufService.findBySigla(sigla);
+            if (ufVoOptional.isPresent()) {
+                List<UfVo> ufVoList = new ArrayList<>();
+                ufVoList.add(ufVoOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(ufVoList);
+            } else
+                return ResponseEntity.notFound().build();
+        }
+        if (!(nome.equals("-1"))) {
+            Optional<UfVo> ufVoOptional = ufService.findByNome(nome);
+            if (ufVoOptional.isPresent()){
+                List<UfVo> ufVoList = new ArrayList<>();
+                ufVoList.add(ufVoOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
+            } else
+                return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.status(HttpStatus.OK).body(ufService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UfVo> getUfById(@PathVariable long id) {
-        Optional<UfVo> ufVoOptional = ufService.findById(id);
-        return ufVoOptional.map(ufVo -> ResponseEntity.status(HttpStatus.OK).body(ufVo)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -34,8 +60,8 @@ public class UfController {
         return ResponseEntity.status(HttpStatus.OK).body(ufService.save(ufDto)) ;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UfVo> updateUf(@PathVariable long id, @RequestBody UfDto ufDto) {
+    @PutMapping
+    public ResponseEntity<UfVo> updateUf(@RequestParam(value = "id", required = false) long id, @RequestBody UfDto ufDto) {
         Optional<UfVo> ufVoOptional = ufService.findById(id);
         if (ufVoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
@@ -44,8 +70,8 @@ public class UfController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUf(@PathVariable long id) {
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUf(@RequestParam(value = "id", required = false) long id) {
         if (ufService.delete(id)) {
             return ResponseEntity.noContent().build();
         } else {
