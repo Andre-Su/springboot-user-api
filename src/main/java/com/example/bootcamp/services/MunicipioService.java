@@ -14,7 +14,12 @@ public class MunicipioService {
 
     @Autowired
     private MunicipioRepository municipioRepository;
+    @Autowired
     private UfRepository ufRepository;
+
+    public boolean existsById(long id){
+        return municipioRepository.existsById(id);
+    }
 
     public List<MunicipioVo> getAllMunicipios() {
         return municipioRepository.findAll();
@@ -28,7 +33,7 @@ public class MunicipioService {
         MunicipioVo municipioVo = new MunicipioVo();
         municipioVo.setNome(municipioDto.nome());
         municipioVo.setStatus(municipioDto.status());
-        municipioVo.setUf(ufRepository.findById(municipioDto.codigoUf()).get());
+        municipioVo.setUf(ufRepository.findById(municipioDto.codigoUF()).get());
 
         return municipioRepository.save(municipioVo);
     }
@@ -38,7 +43,7 @@ public class MunicipioService {
         if (existingMunicipio != null) {
             existingMunicipio.setNome(municipioDto.nome());
             existingMunicipio.setStatus(municipioDto.status());
-            existingMunicipio.setUf(ufRepository.findById(municipioDto.codigoUf()).get());
+            existingMunicipio.setUf(ufRepository.findById(municipioDto.codigoUF()).get());
             return municipioRepository.save(existingMunicipio);
         }
         return null;
