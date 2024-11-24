@@ -35,7 +35,7 @@ public class MunicipioController {
                 municipioVoList.add(municipioVo.get());
                 return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
             } else
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         /* if (!(codigoUF == -1)) {
             List<Optional<MunicipioVo>> municipioVoList = municipioService.findByUFId(codigoUF);
@@ -55,7 +55,7 @@ public class MunicipioController {
                 municipioVoList.add(municipioVo.get());
                 return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
             } else
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(municipioService.getAllMunicipios());
     }
@@ -77,7 +77,6 @@ public class MunicipioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
 
     @DeleteMapping
     public ResponseEntity<Void> deleteMunicipio(@RequestParam(value = "id", defaultValue = "-1") long id) {
