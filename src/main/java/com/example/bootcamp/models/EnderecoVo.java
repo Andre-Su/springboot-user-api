@@ -1,5 +1,7 @@
 package com.example.bootcamp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -26,13 +28,14 @@ public class EnderecoVo implements Serializable {
     private String cep;
 
     //pessoa @OneToMany
-    //@JsonProperty(access = JsonProperty.Access.AUTO)
-    @ManyToOne
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "CODIGO_PESSOA")
     private PessoaVo pessoa;
 
     //bairro @OneToMany
-    //@JsonProperty(access = JsonProperty.Access.AUTO)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToOne
     @JoinColumn(name = "CODIGO_BAIRRO")
     private BairroVo bairro;
