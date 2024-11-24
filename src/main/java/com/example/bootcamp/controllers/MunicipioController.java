@@ -38,14 +38,16 @@ public class MunicipioController {
                 return ResponseEntity.notFound().build();
         }
         /* if (!(codigoUF == -1)) {
-            Optional<MunicipioVo> municipioVo = municipioService.findByUFId(codigoUF);
-            if (municipioVo.isPresent()) {
-                List<MunicipioVo> municipioVoList = new ArrayList<>();
-                municipioVoList.add(municipioVo.get());
-                return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
-            } else
-                return ResponseEntity.notFound().build();
-        }*/
+            List<Optional<MunicipioVo>> municipioVoList = municipioService.findByUFId(codigoUF);
+            List<MunicipioVo> municipioVos = new ArrayList<>();
+            for (Optional<MunicipioVo> municipioVoOptional: municipioVoList){
+                if (municipioVoOptional.isPresent()) {
+                    MunicipioVo municipioVo = municipioVoOptional.get();
+                    municipioVos.add(municipioVo);
+                }
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(municipioVos) ;
+        } */
         if (!(nome.equals("-1"))) {
             Optional<MunicipioVo> municipioVo = municipioService.findByNome(nome);
             if (municipioVo.isPresent()){

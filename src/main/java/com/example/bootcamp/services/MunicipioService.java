@@ -26,7 +26,7 @@ public class MunicipioService {
         return municipioRepository.findByNome(nome);
     }
 
-    public Optional<MunicipioVo> findByUFId(long codigoUF) {
+    public List<Optional<MunicipioVo>> findByUFId(long codigoUF) {
         return municipioRepository.findByUf(ufRepository.findById(codigoUF).get());
     }
 
