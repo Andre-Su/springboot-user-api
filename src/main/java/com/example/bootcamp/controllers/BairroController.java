@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,21 +22,29 @@ public class BairroController {
     private MunicipioService municipioService;
 
     @GetMapping
-    public ResponseEntity<List<BairroVo>> getAllBairros() {
+    public ResponseEntity<List<BairroVo>> getAllBairros(
+            @RequestParam(value = "id", required = false) long id,
+            @RequestParam(value = "nome", required = false) String nome
+    ) {
+        if (id != -1){
+            Optional<BairroVo> bairroVoOptional = bairroService.findById(id);
+            if (bairroVoOptional.isPresent()){
+                List<BairroVo> bairroVoList = new ArrayList<>();
+                bairroVoList.add(bairroVoOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(bairroVoList) ;
+            } else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        if (nome.equals("-1")){
+            Optional<BairroVo> bairroVoOptional = bairroService.findByNome(nome);
+            if (bairroVoOptional.isPresent()){
+                List<BairroVo> bairroVoList = new ArrayList<>();
+                bairroVoList.add(bairroVoOptional.get());
+                return ResponseEntity.status(HttpStatus.OK).body(bairroVoList) ;
+            } else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(bairroService.findAll());
-    }
-
-    @GetMapping("/id")
-    public ResponseEntity<BairroVo> getBairroById(@RequestParam(value = "id", required = false) long id) {
-        Optional<BairroVo> bairroVoOptional = bairroService.findById(id);
-        return bairroVoOptional.map(bairroVo -> ResponseEntity.status(HttpStatus.OK).body(bairroVo))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
-    }
-
-    @GetMapping("/nome")
-    public ResponseEntity<BairroVo> getBairroByNome(@RequestParam(value = "nome", required = false) String nome) {
-        Optional<BairroVo> bairroVoOptional = bairroService.findByNome(nome);
-        return bairroVoOptional.map(bairroVo -> ResponseEntity.status(HttpStatus.OK).body(bairroVo)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
     @PostMapping
@@ -46,8 +55,8 @@ public class BairroController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<BairroVo> updateBairro(@PathVariable long id, @RequestBody BairroDto bairroDto) {
+    @PutMapping
+    public ResponseEntity<BairroVo> updateBairro(@RequestParam(value = "id", required = false) long id, @RequestBody BairroDto bairroDto) {
         Optional<BairroVo> bairroVoOptional = bairroService.findById(id);
         if(bairroVoOptional.isPresent() && municipioService.existsById(bairroDto.codigoMunicipio())) {
             return ResponseEntity.status(HttpStatus.OK).body(bairroService.updateBairro(id, bairroDto));
@@ -56,4 +65,12 @@ public class BairroController {
         }
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteById(@RequestParam(value = "id", required = false) long id) {
+        if (bairroService.exitsById(id)) {
+            bairroService.deleteBairro(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
 }
