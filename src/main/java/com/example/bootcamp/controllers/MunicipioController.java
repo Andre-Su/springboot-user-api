@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/municipio")
@@ -21,13 +23,39 @@ public class MunicipioController {
     private UfService ufService;
 
     @GetMapping
-    public ResponseEntity<List<MunicipioVo>> getAllMunicipios() {
-        return ResponseEntity.status(HttpStatus.OK).body(municipioService.getAllMunicipios());
-    }
+    public ResponseEntity<List<MunicipioVo>> getAllMunicipios(
+            @RequestParam(value = "id", defaultValue = "-1") long id,
+//            @RequestParam(value = "sigla", defaultValue = "-1") Long codigoUF,
+            @RequestParam(value = "nome", defaultValue = "-1") String nome) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MunicipioVo> getMunicipioById(@PathVariable long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(municipioService.getMunicipioById(id));
+        if (!(id == -1)){
+            Optional<MunicipioVo> municipioVo = municipioService.findById(id);
+            if (municipioVo.isPresent()){
+                List<MunicipioVo> municipioVoList = new ArrayList<>();
+                municipioVoList.add(municipioVo.get());
+                return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
+            } else
+                return ResponseEntity.notFound().build();
+        }
+        /* if (!(codigoUF == -1)) {
+            Optional<MunicipioVo> municipioVo = municipioService.findByUFId(codigoUF);
+            if (municipioVo.isPresent()) {
+                List<MunicipioVo> municipioVoList = new ArrayList<>();
+                municipioVoList.add(municipioVo.get());
+                return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
+            } else
+                return ResponseEntity.notFound().build();
+        }*/
+        if (!(nome.equals("-1"))) {
+            Optional<MunicipioVo> municipioVo = municipioService.findByNome(nome);
+            if (municipioVo.isPresent()){
+                List<MunicipioVo> municipioVoList = new ArrayList<>();
+                municipioVoList.add(municipioVo.get());
+                return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
+            } else
+                return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(municipioService.getAllMunicipios());
     }
 
     @PostMapping
@@ -39,8 +67,8 @@ public class MunicipioController {
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MunicipioVo> updateMunicipio(@PathVariable long id, @RequestBody MunicipioDto municipioDto) {
+    @PutMapping
+    public ResponseEntity<MunicipioVo> updateMunicipio(@RequestParam(value = "id", defaultValue = "-1") long id, @RequestBody MunicipioDto municipioDto) {
         if (municipioService.existsById(id) && ufService.existsById(municipioDto.codigoUF())) {
             return ResponseEntity.status(HttpStatus.OK).body(municipioService.updateMunicipio(id, municipioDto));
         } else {
@@ -49,8 +77,8 @@ public class MunicipioController {
     }
 
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMunicipio(@PathVariable long id) {
+    @DeleteMapping
+    public ResponseEntity<Void> deleteMunicipio(@RequestParam(value = "id", defaultValue = "-1") long id) {
         municipioService.deleteMunicipio(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
