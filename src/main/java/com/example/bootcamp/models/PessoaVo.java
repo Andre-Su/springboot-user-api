@@ -1,5 +1,6 @@
 package com.example.bootcamp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
@@ -36,7 +37,7 @@ public class PessoaVo implements Serializable {
 
     // endereco @OneToMany
     @JsonProperty(access = JsonProperty.Access.AUTO)
-    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pessoa", fetch = FetchType.EAGER)
     private Set<EnderecoVo> enderecos = new HashSet<>();
 
     public long getCodigoPessoa() {

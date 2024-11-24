@@ -1,4 +1,14 @@
 package com.example.bootcamp.dtos;
 
-public record PessoaDto(String nome, String sobrenome, int status, int idade, String login, String senha) {
+import java.util.Set;
+
+public record PessoaDto(
+        String nome,
+        String sobrenome,
+        int status,
+        int idade,
+        String login,
+        String senha,
+        Set<EnderecoDto> enderecos
+) {
 }
