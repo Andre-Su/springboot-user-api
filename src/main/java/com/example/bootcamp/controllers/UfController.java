@@ -32,7 +32,7 @@ public class UfController {
                 ufVoList.add(ufVoOptional.get());
                 return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
             } else
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         if (!(sigla.equals("-1"))) {
             Optional<UfVo> ufVoOptional = ufService.findBySigla(sigla);
@@ -41,7 +41,7 @@ public class UfController {
                 ufVoList.add(ufVoOptional.get());
                 return ResponseEntity.status(HttpStatus.OK).body(ufVoList);
             } else
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         if (!(nome.equals("-1"))) {
             Optional<UfVo> ufVoOptional = ufService.findByNome(nome);
@@ -50,7 +50,7 @@ public class UfController {
                 ufVoList.add(ufVoOptional.get());
                 return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
             } else
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(ufService.findAll());
     }
@@ -66,16 +66,15 @@ public class UfController {
         if (ufVoOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(ufService.update(id, ufDto).get());
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteUf(@RequestParam(value = "id", required = false) long id) {
-        if (ufService.delete(id)) {
+        if (ufService.existsById(id)){
             return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 }
