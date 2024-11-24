@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MunicipioRepository extends JpaRepository<MunicipioVo, Long> {
-    public Optional<MunicipioVo> findByNome(String nome);
-    public Optional<MunicipioVo> findByUf(UfVo ufVo);
+    Optional<MunicipioVo> findByNome(String nome);
+    Optional<MunicipioVo> findByUf(UfVo ufVo);
 }
