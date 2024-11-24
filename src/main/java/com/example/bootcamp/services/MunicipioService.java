@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MunicipioService {
@@ -16,6 +17,18 @@ public class MunicipioService {
     private MunicipioRepository municipioRepository;
     @Autowired
     private UfRepository ufRepository;
+
+    public Optional<MunicipioVo> findById(long id){
+        return municipioRepository.findById(id);
+    }
+
+    public Optional<MunicipioVo> findByNome(String nome) {
+        return municipioRepository.findByNome(nome);
+    }
+
+    public Optional<MunicipioVo> findByUFId(long codigoUF) {
+        return municipioRepository.findByUf(ufRepository.findById(codigoUF).get());
+    }
 
     public boolean existsById(long id){
         return municipioRepository.existsById(id);
