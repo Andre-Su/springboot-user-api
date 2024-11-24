@@ -27,6 +27,14 @@ public class UfService {
         return ufRepository.findById(id);
     }
 
+    public Optional<UfVo> findBySigla(String sigla) {
+        return ufRepository.findBySigla(sigla);
+    }
+
+    public Optional<UfVo> findByNome(String nome) {
+        return ufRepository.findByNome(nome);
+    }
+
     public UfVo save(UfDto ufDto) {
         UfVo ufVo = new UfVo();
         ufVo.setSigla(ufDto.sigla());
