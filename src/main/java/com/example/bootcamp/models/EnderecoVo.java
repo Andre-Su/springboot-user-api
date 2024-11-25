@@ -21,7 +21,7 @@ public class EnderecoVo implements Serializable {
     @Column(nullable = false, length = 10)
     private int numero;
 
-    @Column(nullable = false, length = 20)
+    @Column(length = 20)
     private String complemento;
 
     @Column(nullable = false, name = "CEP", length = 10)
