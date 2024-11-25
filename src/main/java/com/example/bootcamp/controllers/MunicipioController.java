@@ -80,7 +80,10 @@ public class MunicipioController {
 
     @DeleteMapping
     public ResponseEntity<Void> deleteMunicipio(@RequestParam(value = "id", defaultValue = "-1") long id) {
-        municipioService.deleteMunicipio(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        if (municipioService.existsById(id)) {
+            municipioService.deleteMunicipio(id);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
 }

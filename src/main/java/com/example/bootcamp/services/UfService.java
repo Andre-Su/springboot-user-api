@@ -53,6 +53,8 @@ public class UfService {
     }
 
     public void deleteById(long id) {
-        ufRepository.deleteById(id);
+        UfVo ufVo = ufRepository.findById(id).get();
+        ufVo.setStatus(2);
+        ufRepository.save(ufVo);
     }
 }

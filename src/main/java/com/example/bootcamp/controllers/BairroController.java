@@ -69,7 +69,7 @@ public class BairroController {
     public ResponseEntity<Void> deleteById(@RequestParam(value = "id", required = false) long id) {
         if (bairroService.exitsById(id)) {
             bairroService.deleteBairro(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         } else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }

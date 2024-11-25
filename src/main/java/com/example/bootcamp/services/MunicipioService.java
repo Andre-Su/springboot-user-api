@@ -63,6 +63,8 @@ public class MunicipioService {
     }
 
     public void deleteMunicipio(long id) {
-        municipioRepository.deleteById(id);
+        MunicipioVo municipioVo = municipioRepository.findById(id).get();
+        municipioVo.setStatus(2);
+        municipioRepository.save(municipioVo);
     }
 }

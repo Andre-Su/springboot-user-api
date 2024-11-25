@@ -43,7 +43,9 @@ public class BairroService {
     }
 
     public void deleteBairro(long id) {
-        bairroRepository.deleteById(id);
+        BairroVo bairroVo = bairroRepository.findById(id).get();
+        bairroVo.setStatus(2);
+        bairroRepository.save(bairroVo);
     }
 
     public BairroVo updateBairro(long id, BairroDto bairroDto) {

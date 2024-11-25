@@ -73,7 +73,8 @@ public class UfController {
     @DeleteMapping
     public ResponseEntity<Void> deleteUf(@RequestParam(value = "id", required = false) long id) {
         if (ufService.existsById(id)){
-            return ResponseEntity.noContent().build();
+            ufService.deleteById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
     }
