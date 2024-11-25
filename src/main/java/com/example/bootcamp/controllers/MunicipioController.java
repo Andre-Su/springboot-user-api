@@ -26,7 +26,7 @@ public class MunicipioController {
     public ResponseEntity<List<MunicipioVo>> getAllMunicipios(
             @RequestParam(value = "id", defaultValue = "-1") long id,
 //            @RequestParam(value = "sigla", defaultValue = "-1") Long codigoUF,
-            @RequestParam(value = "nome", defaultValue = "-1") String nome) {
+            @RequestParam(value = "nome", defaultValue = "") String nome) {
 
         if (!(id == -1)){
             Optional<MunicipioVo> municipioVo = municipioService.findById(id);
@@ -48,7 +48,7 @@ public class MunicipioController {
             }
             return ResponseEntity.status(HttpStatus.OK).body(municipioVos) ;
         } */
-        if (!(nome.equals("-1"))) {
+        if (!(nome.isEmpty())) {
             Optional<MunicipioVo> municipioVo = municipioService.findByNome(nome);
             if (municipioVo.isPresent()){
                 List<MunicipioVo> municipioVoList = new ArrayList<>();
