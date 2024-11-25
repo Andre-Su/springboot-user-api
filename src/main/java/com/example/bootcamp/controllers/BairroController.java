@@ -22,9 +22,9 @@ public class BairroController {
     private MunicipioService municipioService;
 
     @GetMapping
-    public ResponseEntity<List<BairroVo>> getAllBairros(
-            @RequestParam(value = "id", required = false) long id,
-            @RequestParam(value = "nome", required = false) String nome
+    public ResponseEntity<List<BairroVo>> getBairro(
+            @RequestParam(value = "id", defaultValue = "-1") long id,
+            @RequestParam(value = "nome", defaultValue = "") String nome
     ) {
         if (id != -1){
             Optional<BairroVo> bairroVoOptional = bairroService.findById(id);
@@ -35,7 +35,7 @@ public class BairroController {
             } else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        if (nome.equals("-1")){
+        if (!nome.isEmpty()){
             Optional<BairroVo> bairroVoOptional = bairroService.findByNome(nome);
             if (bairroVoOptional.isPresent()){
                 List<BairroVo> bairroVoList = new ArrayList<>();
