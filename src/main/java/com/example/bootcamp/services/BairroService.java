@@ -30,7 +30,7 @@ public class BairroService {
         return bairroRepository.findById(id);
     }
 
-    public Optional<BairroVo> findByNome(String nome){
+    public List<Optional<BairroVo>> findByNome(String nome){
         return bairroRepository.findByNome(nome);
     }
 
@@ -43,9 +43,7 @@ public class BairroService {
     }
 
     public void deleteBairro(long id) {
-        BairroVo bairroVo = bairroRepository.findById(id).get();
-        bairroVo.setStatus(2);
-        bairroRepository.save(bairroVo);
+        bairroRepository.deleteById(id);
     }
 
     public BairroVo updateBairro(long id, BairroDto bairroDto) {

@@ -36,12 +36,14 @@ public class BairroController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         if (!nome.isEmpty()){
-            Optional<BairroVo> bairroVoOptional = bairroService.findByNome(nome);
-            if (bairroVoOptional.isPresent()){
-                List<BairroVo> bairroVoList = new ArrayList<>();
-                bairroVoList.add(bairroVoOptional.get());
+//            List<Optional<BairroVo>> bairroVoOptionalList = bairroService.findByNome(nome);
+            List<BairroVo> bairroVoList = new ArrayList<>();
+            for (Optional<BairroVo> bairroVoOptional:bairroService.findByNome(nome)){
+                bairroVoOptional.ifPresent(bairroVoList::add);
+            }
+            if (!bairroVoList.isEmpty())
                 return ResponseEntity.status(HttpStatus.OK).body(bairroVoList) ;
-            } else
+            else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(bairroService.findAll());
