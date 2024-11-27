@@ -86,4 +86,8 @@ public class PessoaService {
         pessoa.setStatus(2);
         pessoaRepository.save(pessoa);
     }
+
+    public List<Optional<PessoaVo>> findByStatus(int status) {
+        return pessoaRepository.findByStatus(status);
+    }
 }

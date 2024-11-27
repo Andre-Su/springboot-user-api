@@ -34,6 +34,10 @@ public class BairroService {
         return bairroRepository.findByNome(nome);
     }
 
+    public List<Optional<BairroVo>> findByStatus(int status){
+        return bairroRepository.findByStatus(status);
+    }
+
     public BairroVo save(BairroDto bairroDto) {
         BairroVo bairroVo = new BairroVo();
         bairroVo.setNome(bairroDto.nome());
@@ -43,7 +47,9 @@ public class BairroService {
     }
 
     public void deleteBairro(long id) {
-        bairroRepository.deleteById(id);
+        BairroVo bairroVo = bairroRepository.findById(id).get();
+        bairroVo.setStatus(2);
+        bairroRepository.save(bairroVo);
     }
 
     public BairroVo updateBairro(long id, BairroDto bairroDto) {

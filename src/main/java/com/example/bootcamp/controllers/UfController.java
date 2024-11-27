@@ -22,8 +22,9 @@ public class UfController {
     @GetMapping
     public ResponseEntity<List<UfVo>> getAllUfs(
             @RequestParam(value = "id", defaultValue = "-1") long id,
-            @RequestParam(value = "sigla", defaultValue = "-1") String sigla,
-            @RequestParam(value = "nome", defaultValue = "-1") String nome
+            @RequestParam(value = "sigla", defaultValue = "") String sigla,
+            @RequestParam(value = "nome", defaultValue = "") String nome,
+            @RequestParam(value = "status", defaultValue = "-1") int status
     ) {
         if (!(id == -1)){
             Optional<UfVo> ufVoOptional = ufService.findById(id);
@@ -34,7 +35,7 @@ public class UfController {
             } else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        if (!(sigla.equals("-1"))) {
+        if (!(sigla.isEmpty())) {
             Optional<UfVo> ufVoOptional = ufService.findBySigla(sigla);
             if (ufVoOptional.isPresent()) {
                 List<UfVo> ufVoList = new ArrayList<>();
@@ -43,7 +44,7 @@ public class UfController {
             } else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        if (!(nome.equals("-1"))) {
+        if (!(nome.isEmpty())) {
             Optional<UfVo> ufVoOptional = ufService.findByNome(nome);
             if (ufVoOptional.isPresent()){
                 List<UfVo> ufVoList = new ArrayList<>();
@@ -51,6 +52,18 @@ public class UfController {
                 return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
             } else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        if (!(status == -1)) {
+            List<UfVo> ufVoList = new ArrayList<>();
+            for (Optional<UfVo> ufVo: ufService.findByStatus(status)){
+                if (ufVo.isPresent()) {
+                    ufVoList.add(ufVo.get());
+                }
+            }
+            if (!ufVoList.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(ufVoList) ;
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null) ;
         }
         return ResponseEntity.status(HttpStatus.OK).body(ufService.findAll());
     }

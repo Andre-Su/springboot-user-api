@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MunicipioRepository extends JpaRepository<MunicipioVo, Long> {
     Optional<MunicipioVo> findByNome(String nome);
     List<Optional<MunicipioVo>> findByUf(UfVo ufVo);
+    List<Optional<MunicipioVo>> findByStatus(int status);
 }

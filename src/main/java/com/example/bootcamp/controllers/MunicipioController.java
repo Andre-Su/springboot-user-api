@@ -25,8 +25,8 @@ public class MunicipioController {
     @GetMapping
     public ResponseEntity<List<MunicipioVo>> getAllMunicipios(
             @RequestParam(value = "id", defaultValue = "-1") long id,
-//            @RequestParam(value = "sigla", defaultValue = "-1") Long codigoUF,
-            @RequestParam(value = "nome", defaultValue = "") String nome) {
+            @RequestParam(value = "nome", defaultValue = "") String nome,
+            @RequestParam(value = "status", defaultValue = "-1") int status) {
 
         if (!(id == -1)){
             Optional<MunicipioVo> municipioVo = municipioService.findById(id);
@@ -37,17 +37,16 @@ public class MunicipioController {
             } else
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
-        /* if (!(codigoUF == -1)) {
-            List<Optional<MunicipioVo>> municipioVoList = municipioService.findByUFId(codigoUF);
-            List<MunicipioVo> municipioVos = new ArrayList<>();
-            for (Optional<MunicipioVo> municipioVoOptional: municipioVoList){
-                if (municipioVoOptional.isPresent()) {
-                    MunicipioVo municipioVo = municipioVoOptional.get();
-                    municipioVos.add(municipioVo);
-                }
+        if (!(status == -1)){
+            List<MunicipioVo> municipioVoList = new ArrayList<>();
+            for (Optional<MunicipioVo> municipioVoOptional: municipioService.findByStatus(status)){
+                municipioVoOptional.ifPresent(municipioVoList::add);
             }
-            return ResponseEntity.status(HttpStatus.OK).body(municipioVos) ;
-        } */
+            if (!municipioVoList.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(municipioVoList) ;
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         if (!(nome.isEmpty())) {
             Optional<MunicipioVo> municipioVo = municipioService.findByNome(nome);
             if (municipioVo.isPresent()){

@@ -67,4 +67,8 @@ public class MunicipioService {
         municipioVo.setStatus(2);
         municipioRepository.save(municipioVo);
     }
+
+    public List<Optional<MunicipioVo>> findByStatus(int status) {
+        return municipioRepository.findByStatus(status);
+    }
 }

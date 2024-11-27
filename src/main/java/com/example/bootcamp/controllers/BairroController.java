@@ -24,7 +24,8 @@ public class BairroController {
     @GetMapping
     public ResponseEntity<List<BairroVo>> getBairro(
             @RequestParam(value = "id", defaultValue = "-1") long id,
-            @RequestParam(value = "nome", defaultValue = "") String nome
+            @RequestParam(value = "nome", defaultValue = "") String nome,
+            @RequestParam(value = "status", defaultValue = "-1") int status
     ) {
         if (id != -1){
             Optional<BairroVo> bairroVoOptional = bairroService.findById(id);
@@ -36,9 +37,18 @@ public class BairroController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
         if (!nome.isEmpty()){
-//            List<Optional<BairroVo>> bairroVoOptionalList = bairroService.findByNome(nome);
             List<BairroVo> bairroVoList = new ArrayList<>();
             for (Optional<BairroVo> bairroVoOptional:bairroService.findByNome(nome)){
+                bairroVoOptional.ifPresent(bairroVoList::add);
+            }
+            if (!bairroVoList.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(bairroVoList) ;
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        if (status != -1){
+            List<BairroVo> bairroVoList = new ArrayList<>();
+            for (Optional<BairroVo> bairroVoOptional:bairroService.findByStatus(status)){
                 bairroVoOptional.ifPresent(bairroVoList::add);
             }
             if (!bairroVoList.isEmpty())

@@ -21,6 +21,7 @@ public class PessoaConroller {
     @GetMapping
     public ResponseEntity<List<PessoaVo>> getPessoa(
             @RequestParam(value = "id", defaultValue = "-1") long id,
+            @RequestParam(value = "status", defaultValue = "-1") int status,
             @RequestParam(value = "id", defaultValue = "") String login
     ) {
         if (id != -1) {
@@ -43,6 +44,16 @@ public class PessoaConroller {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
+        }
+        if (status != -1){
+            List<PessoaVo> pessoaVos = new ArrayList<>();
+            for (Optional<PessoaVo> pessoaVoOptional: pessoaService.findByStatus(status)){
+                pessoaVoOptional.ifPresent(pessoaVos::add);
+            }
+            if (!pessoaVos.isEmpty())
+                return ResponseEntity.status(HttpStatus.OK).body(pessoaVos) ;
+            else
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.findAll());

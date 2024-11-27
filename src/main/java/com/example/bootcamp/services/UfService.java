@@ -35,6 +35,10 @@ public class UfService {
         return ufRepository.findByNome(nome);
     }
 
+    public List<Optional<UfVo>> findByStatus(int status) {
+        return ufRepository.findByStatus(status);
+    }
+
     public UfVo save(UfDto ufDto) {
         UfVo ufVo = new UfVo();
         ufVo.setSigla(ufDto.sigla());
